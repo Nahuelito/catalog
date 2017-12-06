@@ -354,8 +354,6 @@ def editCategory(category_name):
 def showItem(category_name, item_name):
     item = session.query(Item).filter_by(name=item_name).one()
     categories = session.query(Category).order_by(Category.name).all()
-    print "Login Session: " + str(login_session['user_id'])
-    print "User ID from Item: " + str(item.user_id)
 
     loggedIn = 'gplus_id' in login_session
     return render_template('item.html', item=item,
