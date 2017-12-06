@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Delete Category{% endblock %}
+{% block nav %}
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ user_image }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ username }}</span>
+      <span class="mdl-list__item-sub-title">{{ email }}</span>
+    </span>
+  </li>
+</ul>y
+{% endblock %}
+{% block content %}
+<div class="page-content">
+  <!-- Your content goes here -->
+  <h3 style="margin-left: 5%;">Delete Category</h3>
+  <form action="{{url_for('deleteCategory', category_name = category.name)}}" method="POST" style="margin-left: 5%;">
+    <h4>Are you sure you want to delete {{ category.name }}?</h4>
+
+    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+      Delete
+    </button>
+    <a class="mdl-navigation__link" href="{{ url_for('showCatalog') }}">
+      Cancel
+    </a>
+  </form>
+</div>
+{% endblock %}

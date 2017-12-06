@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+  <title>{% block title %}{% endblock %} - Item Catalog</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.lime-orange.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <a href="/catalog" style="text-decoration:none; color:white;"><span class="mdl-layout-title">Item Catalog</span></a>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+	{% block nav %}{% endblock %}
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Categories</span>
+    <nav class="mdl-navigation">
+      {% for c in categories %}
+      <a class="mdl-navigation__link" href="/catalog/{{ c.name }}/items">{{ c.name }}</a>
+	{% endfor %}
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

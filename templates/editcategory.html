@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{% block title %}Edit Category{% endblock %}
+{% block nav %}
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ user_image }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ username }}</span>
+      <span class="mdl-list__item-sub-title">{{ email }}</span>
+    </span>
+  </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div class="page-content">
+<!-- Your content goes here -->
+<h3 style="margin-left: 5%;">Edit Category</h3>
+<form action="{{url_for('editCategory', category_name=category.name)}}" method="POST" style="margin-left: 5%;">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input class="mdl-textfield__input" type="text" size="80" name="name" value="{{ category.name}}">
+    <label class="mdl-textfield__label" for="name">Name</label>
+  </div><br>
+
+  <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+    Edit
+  </button>
+  <a class="mdl-navigation__link" href="{{ url_for('showCatalog') }}">
+    Cancel
+  </a>
+</form>
+</div>
+{% endblock %}

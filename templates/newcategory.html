@@ -1,0 +1,46 @@
+{% extends 'base.html'%}
+{% block title %}New Category{% endblock %}
+{% block nav %}
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ user_image }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ username }}</span>
+      <span class="mdl-list__item-sub-title">{{ email }}</span>
+    </span>
+  </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div class="page-content">
+  <!-- Your content goes here -->
+  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+  
+  <h3 style="margin-left: 5%;">New Category</h3>
+  <form action="{{url_for('newCategory')}}" method="POST" style="margin-left: 5%;">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" size="80" name="name" pattern="-?\w+( )*\w*?">
+      <label class="mdl-textfield__label" for="name">Name</label>
+      <span class="mdl-textfield__error">Input should contain only letters</span>
+    </div><br>
+    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+      Create
+    </button>
+    <a class="mdl-navigation__link" href="{{ url_for('showCatalog') }}">
+      Cancel
+    </a>
+  </form>
+</div>
+{% endblock %}

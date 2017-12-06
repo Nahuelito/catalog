@@ -1,0 +1,65 @@
+{% extends 'base.html'%}
+{% block title %}Categories{% endblock %}
+{% block nav %}
+{% if not loggedIn %}
+<a href="{{url_for('login')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log In
+</a>
+{% else %}
+<a href="{{url_for('newItem')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Add Item
+</a>
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ login_session['picture'] }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ login_session['username'] }}</span>
+      <span class="mdl-list__item-sub-title">{{ login_session['email'] }}</span>
+    </span>
+  </li>
+</ul>
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="page-content">
+  <!-- Your content goes here -->
+  <div id="result"></div>
+ 
+  <h3 style="margin-left: 5%;">Latests Items</h3>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+ 
+  {% for i in latestItems %}
+  <!-- Two Line List with secondary info and action -->
+  <style>
+    .demo-list-two {
+    width: 500px;
+    }
+  </style>
+  
+  <ul class="demo-list-two mdl-list" style="margin-left: 5%;">
+    <li class="mdl-list__item mdl-list__item--two-line">
+      <span class="mdl-list__item-primary-content">
+	<i class="material-icons mdl-list__item-avatar">star</i>
+	<span>
+	  <a href="{{url_for('showItem', category_name=i.category.name, item_name=i.name)}}">
+	    {{ i.name }}
+	  </a>
+	</span>
+	<span class="mdl-list__item-sub-title">{{ i.category.name }}</span>
+      </span>
+    </li>
+  </ul>
+  {% endfor %}  
+</div>
+{% endblock %}

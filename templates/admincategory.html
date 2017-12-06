@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% block title %}{{ category_name }}{% endblock %}
+{% block nav %}
+<a class="mdl-button mdl-js-button mdl-js-ripple-effect" href="{{url_for('editCategory', category_name=category_name)}}">
+  Edit
+</a>
+<a class="mdl-button mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteCategory', category_name=category_name)}}">
+  Delete
+</a>
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ user_image }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ username }}</span>
+      <span class="mdl-list__item-sub-title">{{ email }}</span>
+    </span>
+  </li>
+</ul>
+{% endblock %}
+{% block content %}
+<div class="page-content">
+  <!-- Your content goes here -->
+  <h3 style="margin-left: 5%;">{{ category_name }} Items (number of items)</h3>
+  
+  {% for i in items %}
+  <!-- Two Line List with secondary info and action -->
+  <style>
+    .demo-list-two {
+    width: 500px;
+    }
+  </style>
+  
+  <ul class="demo-list-two mdl-list" style="margin-left: 5%;">
+    <li class="mdl-list__item mdl-list__item--two-line">
+      <span class="mdl-list__item-primary-content">
+	<i class="material-icons mdl-list__item-avatar">star</i>
+	<span>
+	  <a href="{{url_for('showItem', category_name=i.category.name, item_name=i.name)}}">
+	    {{ i.name }}
+	  </a>
+	</span>
+	<span class="mdl-list__item-sub-title">{{ i.category.name }}</span>
+      </span>
+    </li>
+  </ul>
+  {% endfor %}
+  
+</div>
+{% endblock %}

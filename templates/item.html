@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+{% block title %}{{ item.name }}{% endblock %}
+{% block nav %}
+{% if not loggedIn %}
+<a href="{{url_for('login')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log In
+</a>
+{% else %}
+<a class="mdl-button mdl-js-button mdl-js-ripple-effect" href="{{url_for('editItem', item_name=item.name)}}">
+  Edit
+</a>
+<a class="mdl-button mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteItem', item_name=item.name)}}">
+  Delete
+</a>
+<a href="{{url_for('gdisconnect')}}" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+  Log Out
+</a>
+<ul class="demo-list-icon mdl-list">
+  <li class="mdl-list__item mdl-list__item--two-line">
+    <img style="margin-right:5%;" class="material-icons mdl-list__item-avatar" src={{ login_session['picture'] }}>
+    <span class="mdl-list__item-primary-content">
+      <span>{{ login_session['username'] }}</span>
+      <span class="mdl-list__item-sub-title">{{ login_session['email'] }}</span>
+    </span>
+  </li>
+</ul>
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="page-content">
+  <!-- Your content goes here -->
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}    	
+
+  <h3 style="margin-left: 5%;">{{ item.name }}</h3>
+  <h5 style="margin-left: 5%;">{{ item.description }}</h5>
+</div>
+{% endblock %}
