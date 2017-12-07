@@ -34,12 +34,6 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-@app.route('/catalog.json')
-def catalogJSON():
-    items = session.query(Item).all()
-    return jsonify(Item=[i.serialize for i in items])
-
-
 @app.route('/')
 @app.route('/catalog/')
 def showCatalog():
@@ -360,6 +354,12 @@ def showItem(category_name, item_name):
                            categories=categories,
                            loggedIn=loggedIn,
                            login_session=login_session)
+
+
+@app.route('/catalog/<category_name>/<item_name>.json')
+def catalogJSON(category_name, item_name):
+    item = session.query(Item).filter_by(name=item_name).one()
+    return jsonify(Item=item.serialize)
 
 
 @app.route('/catalog/<category_name>/items/')
