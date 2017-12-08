@@ -64,6 +64,15 @@
 	<h2 class="mdl-card__title-text">Log In</h2>
       </div>
       <div class="mdl-card__supporting-text">
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	<ul>
+	  {% for message in messages %}
+	  <li><strong>{{ message }}</strong></li>
+	  {% endfor %}
+	</ul>
+	{% endif %}
+	{% endwith %}
 	Actually you only can log in with your Google Plus Account
       </div>
       <div class="mdl-card__actions mdl-card--border">
