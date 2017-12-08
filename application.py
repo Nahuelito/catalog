@@ -20,6 +20,7 @@ from database_setup import Category, Item, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
+from functools import wraps
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -32,6 +33,17 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+# Login required decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'gplus_id' not in login_session:
+            flash("You must be logged in to perform this action")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/')
@@ -180,10 +192,8 @@ def gdisconnect():
 
 # Create route for newItem function here
 @app.route('/catalog/newItem/', methods=['GET', 'POST'])
+@login_required
 def newItem():
-    if 'username' not in login_session:
-        flash("You must be logged in to create new items")
-        return redirect(url_for('showCatalog'))
     if request.method == "POST" and request.form['name'] != '':
         newItem = Item(name=request.form['name'],
                        description=request.form['description'],
@@ -204,11 +214,9 @@ def newItem():
 
 
 # Create route for newCategory function here
+@login_required
 @app.route('/catalog/newCategory/', methods=['GET', 'POST'])
 def newCategory():
-    if 'username' not in login_session:
-        flash("You must be logged in to create new categories")
-        return redirect(url_for('showCatalog'))
     if request.method == "POST":
         if request.form['name'] == "":
             flash("Category Name cannot be empty!")
@@ -231,10 +239,8 @@ def newCategory():
 
 
 @app.route('/catalog/<item_name>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteItem(item_name):
-    if 'username' not in login_session:
-        flash("You must be logged in to delete items")
-        return redirect(url_for('showCatalog'))
     deletedItem = session.query(Item).filter_by(name=item_name).one()
     if deletedItem.user_id != login_session['user_id']:
         flash("""You are not authorized to delete this item.
@@ -255,10 +261,8 @@ def deleteItem(item_name):
 
 
 @app.route('/catalog/<category_name>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteCategory(category_name):
-    if 'username' not in login_session:
-        flash("You must be logged in to delete categories")
-        return redirect(url_for('showAdminCatalog'))
     deletedCategory = session.query(Category).filter_by(
         name=category_name).one()
     if request.method == 'POST':
@@ -290,10 +294,8 @@ def deleteCategory(category_name):
 
 
 @app.route('/catalog/<item_name>/edit/', methods=['GET', 'POST'])
+@login_required
 def editItem(item_name):
-    if 'username' not in login_session:
-        flash("You must be logged in to edit items")
-        return redirect(url_for('showCatalog'))
     editedItem = session.query(Item).filter_by(name=item_name).one()
     if editedItem.user_id != login_session['user_id']:
         flash("""You are not authorized to edit this item.
@@ -320,10 +322,8 @@ def editItem(item_name):
 
 
 @app.route('/catalog/<category_name>/edit/', methods=['GET', 'POST'])
+@login_required
 def editCategory(category_name):
-    if 'username' not in login_session:
-        flash("You must be logged in to edit categories")
-        return redirect(url_for('showAdminCatalog'))
     deletedCategory = session.query(Category).filter_by(
         name=category_name).one()
     if 'email' in login_session and isAdmin(login_session['email']):
