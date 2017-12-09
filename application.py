@@ -103,7 +103,7 @@ def gconnect():
         print "Invalid State Parameter"
         return response
 
-    # Check taht the access token is valid
+    # Check that the access token is valid
     access_token = credentials.access_token
     url = (
         'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
@@ -260,25 +260,12 @@ def deleteItem(item_name):
                                username=login_session['username'])
 
 
-@app.route('/catalog/<category_name>/delete/', methods=['GET', 'POST'])
+@app.route('/catalog/<category_name>/deletecat/', methods=['GET', 'POST'])
 @login_required
 def deleteCategory(category_name):
     deletedCategory = session.query(Category).filter_by(
         name=category_name).one()
     if request.method == 'POST':
-        # Get default category. If it isn't exists, create it.
-        defaultCategory = session.query(Category).filter_by(name='Default')
-        if not defaultCategory:
-            defaultCategory = Category(name='Default')
-
-        session.add(defaultCategory)
-        related_items = session.query(Item).filter_by(
-            category_id=deletedCategory.id).all()
-
-        for i in related_items:
-            i.category_id = defaultCategory.id
-            session.add(i)
-
         session.delete(deletedCategory)
         session.commit()
         flash("A Category has been deleted.")
